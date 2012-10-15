@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
 package vintesh.itc.huffman;
 
@@ -21,7 +23,7 @@ public class FileCompressor {
 
     private static class SymbolFrequencyMap {
 
-        private static ArrayList<SymbolFrequencyMap> table = new ArrayList<SymbolFrequencyMap>();
+        private static ArrayList<SymbolFrequencyMap> symbolTable = new ArrayList<SymbolFrequencyMap>();
         private char symbol;
         private int frequency;
 
@@ -42,7 +44,7 @@ public class FileCompressor {
         }
 
         public static boolean isSymbolPresent(char symbol) {
-            for (SymbolFrequencyMap obj : table) {
+            for (SymbolFrequencyMap obj : symbolTable) {
                 if (obj.getSymbol() == symbol) {
                     return true;
                 }
@@ -51,7 +53,7 @@ public class FileCompressor {
         }
 
         private static void incrementFrequency(char c) {
-            for (SymbolFrequencyMap obj : table) {
+            for (SymbolFrequencyMap obj : symbolTable) {
                 if (obj.getSymbol() == c) {
                     obj.frequency++;
                     return;
@@ -60,12 +62,12 @@ public class FileCompressor {
         }
 
         public static void addSymbol(SymbolFrequencyMap object) {
-            table.add(object);
+            symbolTable.add(object);
         }
 
         public static void drawCurrentMap() {
             System.out.println("Symbol|Frequency");
-            for (SymbolFrequencyMap obj : table) {
+            for (SymbolFrequencyMap obj : symbolTable) {
                 System.out.println("" + obj.getSymbol() + "\t" + obj.getFrequency());
             }
         }
@@ -73,11 +75,11 @@ public class FileCompressor {
         public static ArrayList<Symbol> getSymbolsAsArrayList() {
             ArrayList<Symbol> symbolList = new ArrayList<Symbol>();
             int totalFreq = 0;
-            for (SymbolFrequencyMap obj : table) {
+            for (SymbolFrequencyMap obj : symbolTable) {
                 totalFreq += obj.getFrequency();
             }
 //            logger.info("Getting the Total Frequencies: " + totalFreq);
-            for (SymbolFrequencyMap obj : table) {
+            for (SymbolFrequencyMap obj : symbolTable) {
 //                logger.info("Adding the Value: " + (double) (obj.getFrequency() / (double) totalFreq) + " & Symbol: " + obj.getSymbol());
                 symbolList.add(new Symbol((double) obj.getFrequency() / (double) totalFreq, String.valueOf(obj.getSymbol())));
 
@@ -150,38 +152,28 @@ public class FileCompressor {
             // Getting the codes & symbols as map from the Symbol Class
             Map<String, String> map = Symbol.getMapOfCodes(symbols);
 
-            byte encodedContent[][] = new byte[inputFileAsBytes.length][];
+            String encodedContentAsString[] = new String[inputFileAsBytes.length];
 
             for (int i = 0; i < inputFileAsBytes.length; i++) {
                 try {
-                    byte[] byteChunk = map.get(String.valueOf((char) inputFileAsBytes[i])).getBytes();
-                    encodedContent[i] = new byte[byteChunk.length];
-                    encodedContent[i] = byteChunk;
+                    encodedContentAsString[i] = map.get(String.valueOf((char) inputFileAsBytes[i]));
                 } catch (NullPointerException npe) {
                     logger.warning("Symbol cann't be found in map \nCheck for Symbol: " + inputFileAsBytes[i]);
+                    logger.info(npe.toString());
+                    npe.printStackTrace();
                 }
             }
 
             // TO Allocate memory as need only ... more will lead to add extra spaces in file
-            int totalBytes = 0;
-            for (int i = 0; i < encodedContent.length; i++) {
-                totalBytes += encodedContent[i].length;
-            }
-            byte contentToWrite[] = new byte[totalBytes];
-            int lastLength = 0, l = 0;
-
+            StringBuilder contentToWriteAsString = new StringBuilder();
 
             // Appending all the array to one.
-            for (int i = 0; i < encodedContent.length; i++) {
-//                System.arraycopy(encodedContent, 0, contentToWrite, lastLength, encodedContent[i].length);
-                for (int j = 0; j < encodedContent[i].length; j++) {
-                    contentToWrite[l++] = encodedContent[i][j];
-                }
-//                lastLength += encodedContent[i].length;
+            for (int i = 0; i < encodedContentAsString.length; i++) {
+                contentToWriteAsString.append(encodedContentAsString[i]);
             }
 
             // Writing the final content in to the file
-            fos.write(contentToWrite);
+            fos.write(ByteUtils.fromBinary(contentToWriteAsString.toString()));
         } catch (Exception ex) {
             logger.log(Level.WARNING, ex.toString());
             ex.printStackTrace();

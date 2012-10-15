@@ -1,8 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
-package vintesh.itc.huffman;
+package vintesh.itc.huffman.testing;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import vintesh.itc.huffman.Symbol;
 
 /**
  *
@@ -47,7 +50,7 @@ public class AlphabatesFreqCounter {
     }
 
     public static void main(String[] args) {
-        calculateFreq(new File("E:\\Source.txt"));
+        calculateFreq(new File("files/inputFile.txt"));
         for (Character character : frequencyMap.keySet()) {
             System.out.println("CHAR: " + character + " FREQ: " + frequencyMap.get(character));
         }

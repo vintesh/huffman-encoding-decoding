@@ -1,12 +1,14 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
 package vintesh.itc.huffman;
 
 /**
  *
- * @author me12co18
+ * @author Vintesh
  */
 public interface SymbolTemplate extends Comparable<SymbolTemplate> {
 

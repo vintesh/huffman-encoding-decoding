@@ -1,17 +1,17 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
 package vintesh.itc.huffman;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author me12co18
+ * @author Vintesh
  */
 public class Main {
 

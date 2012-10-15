@@ -1,16 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
-package vintesh.itc.huffman;
+package vintesh.itc.huffman.testing;
 
 import java.util.ArrayList;
+import vintesh.itc.huffman.Symbol;
 
 /**
  *
  * @author Vintesh
  */
-@Deprecated
 public class CodeTree {
 
     public static class Node {

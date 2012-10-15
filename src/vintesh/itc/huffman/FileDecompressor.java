@@ -1,6 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Implemented as Tutorial of Masters Program 
+ * M.E. - Computer Engineering 
+ * Information Theory & Coding
+ * SCET, Surat
  */
 package vintesh.itc.huffman;
 
@@ -25,6 +27,7 @@ public class FileDecompressor {
 
             // Generating the Symbol & Code ArrayList
             ArrayList<Symbol> symbols = getSymbolTable(encodedFileAsBytes);
+
             //            // Generating CodeTree
             //            Node codeTree = CodeTree.makeCodeTree(symbols);
             //            // Logging the CodeTree whether it have been generated correctly or not.
@@ -32,30 +35,41 @@ public class FileDecompressor {
             //            CodeTree.getCodeOfSymbol(CodeTree.Node.ROOT, symbols.get(2).getIdentifier(), code);
             //            System.out.println("Symbol: " + symbols.get(2) + " Code_Retrived: " + code);
 
-
             // Decoding the content
             int dividerIndex = getDividerIndexInArray(encodedFileAsBytes);
 
-            String message = "";
+            byte[] encodedMessage = new byte[encodedFileAsBytes.length - dividerIndex];
             for (int j = 0, i = dividerIndex + 1; i < encodedFileAsBytes.length; i++) {
-                message += String.valueOf((char) encodedFileAsBytes[i]);
+                encodedMessage[j++] = encodedFileAsBytes[i];
             }
+            String message = ByteUtils.toBinary(encodedMessage);
 
             System.out.println("Encoded Message In File: " + message);
             Symbol.symbolListToString(symbols);
 
-            String decodedMessage = "";
+            StringBuilder decodedMessage = new StringBuilder("");
             while (message.length() != 0) {
-                System.out.println("");
-                System.out.println("Meesage: " + message);
-                System.out.println("Message Decoded: " + decodedMessage);
+//                Loggin the Messages 
+//                System.out.println("");
+//                logger.info("Meesage: " + message);
+//                logger.info("Message Decoded: " + decodedMessage);
 
+                boolean flag = false;
                 for (Symbol symbol : symbols) {
                     if (message.startsWith(symbol.getCode())) {
-                        decodedMessage += symbol.getIdentifier();
+                        decodedMessage.append(symbol.getIdentifier());
                         message = message.substring(symbol.getCode().length(), message.length());
+                        flag = true;
                         break;
                     }
+                }
+                /*
+                 * We are checking that if no symbol is there in the symbol list
+                 * then it is the EOF as some padding is done by the String to
+                 * Byte & Byte to String conversion
+                 */
+                if (!flag) {
+                    break;
                 }
             }
             System.out.println("Decoded Message: " + decodedMessage);
@@ -63,8 +77,7 @@ public class FileDecompressor {
             // Writing the decoded Message in the Output File
             File file = new File(decodedFileName);
             FileOutputStream fos = new FileOutputStream(file);
-            fos.write(decodedMessage.getBytes());
-
+            fos.write(decodedMessage.toString().getBytes());
         } catch (Exception ex) {
             logger.log(Level.WARNING, ex.toString());
             ex.printStackTrace();
